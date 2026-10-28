@@ -1,5 +1,5 @@
-import Link from "next/link";
 import Logo from "@/components/Logo";
+import RoleSwitcher from "@/components/RoleSwitcher";
 
 const CLASSES = [
   { name: "U.S. History", teacher: "Mrs. Dunphy", next: "Ch. 7 reading", due: "Fri", grade: "A−", color: "#C7622E" },
@@ -355,6 +355,7 @@ export default function StudentHome() {
           </Card>
         </div>
       </div>
+      <RoleSwitcher />
     </main>
   );
 }

@@ -9,6 +9,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [mode, setMode] = useState<"create" | "signin">("create");
   const [step, setStep] = useState<"account" | "code">("account");
+  const [role, setRole] = useState("/student");
 
   function go(e: React.FormEvent) {
     e.preventDefault();
@@ -16,7 +17,7 @@ export default function LoginPage() {
       setStep("code");
       return;
     }
-    router.push("/student");
+    router.push(role);
   }
 
   const creating = mode === "create";
@@ -125,10 +126,11 @@ export default function LoginPage() {
               </Field>
               {creating && (
                 <Field label="I am a">
-                  <select className="field" defaultValue="student">
-                    <option value="student">Student</option>
-                    <option value="parent">Parent</option>
-                    <option value="teacher">Teaching parent / co-op leader</option>
+                  <select className="field" value={role} onChange={(e) => setRole(e.target.value)}>
+                    <option value="/student">Student</option>
+                    <option value="/admin">Co-op admin / teaching parent</option>
+                    <option value="/volunteer">Volunteer</option>
+                    <option value="/super-admin">Super admin</option>
                   </select>
                 </Field>
               )}
