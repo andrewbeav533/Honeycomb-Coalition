@@ -32,7 +32,8 @@ export default function Browse() {
           </h1>
           <p style={{ color: "var(--ink-soft)", marginTop: 16, fontSize: "1.1rem", maxWidth: 560, lineHeight: 1.6 }}>
             Public-school students and families outside a hive can still come to open
-            events and community clubs. Browse below and request to join.
+            events and community clubs. For safety, the date, time, and location
+            aren&apos;t listed publicly — request info and the organizer reaches out.
           </p>
 
           {/* tabs */}
@@ -80,7 +81,7 @@ export default function Browse() {
           }}
         >
           {list.map((a) => (
-            <ActivityCard key={a.id} a={a} onJoin={setJoining} />
+            <ActivityCard key={a.id} a={a} onJoin={setJoining} publicView />
           ))}
         </div>
 
@@ -125,11 +126,11 @@ function GuestRsvp({ activity, onClose }: { activity: Activity; onClose: () => v
       >
         {sent ? (
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: 40 }}>🎉</div>
-            <h2 style={{ fontSize: "1.5rem", marginTop: 10 }}>You&apos;re on the list</h2>
+            <div style={{ fontSize: 40 }}>✉️</div>
+            <h2 style={{ fontSize: "1.5rem", marginTop: 10 }}>Request sent</h2>
             <p style={{ color: "var(--ink-soft)", marginTop: 10, fontSize: 15, lineHeight: 1.6 }}>
-              We&apos;ve sent the details for <strong>{activity.title}</strong> to your email.
-              {activity.type === "event" ? " The host will confirm your spot." : " Just show up — no account needed."}
+              The organizer of <strong>{activity.title}</strong> will reach out to you with the date,
+              time, and location once your request is reviewed.
             </p>
             <button className="btn btn-honey" style={{ marginTop: 20, width: "100%" }} onClick={onClose}>
               Done
@@ -137,13 +138,14 @@ function GuestRsvp({ activity, onClose }: { activity: Activity; onClose: () => v
           </div>
         ) : (
           <>
-            <span className="eyebrow">{activity.type === "club" ? "Join club" : "Request to attend"}</span>
+            <span className="eyebrow">Request info</span>
             <h2 style={{ fontSize: "1.5rem", marginTop: 8 }}>{activity.title}</h2>
             <p className="mono" style={{ fontSize: 11.5, color: "var(--ink-soft)", marginTop: 4 }}>
-              {activity.host} · {activity.when}
+              {activity.host}
             </p>
             <p style={{ color: "var(--ink-soft)", marginTop: 14, fontSize: 14, lineHeight: 1.6 }}>
-              No account needed — just tell us who to expect.
+              For safety, the date, time, and location aren&apos;t public. Share your contact and the
+              organizer will reach out with the details.
             </p>
             <form
               onSubmit={(e) => {
@@ -154,12 +156,13 @@ function GuestRsvp({ activity, onClose }: { activity: Activity; onClose: () => v
             >
               <input className="field" placeholder="Your name" required />
               <input className="field" type="email" placeholder="Email" required />
+              <input className="field" placeholder="A note for the organizer (optional)" />
               <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
                 <button type="button" className="btn btn-ghost" style={{ flex: 1 }} onClick={onClose}>
                   Cancel
                 </button>
                 <button type="submit" className="btn btn-honey" style={{ flex: 1 }}>
-                  {activity.type === "club" ? "Join" : "Request"}
+                  Request info
                 </button>
               </div>
             </form>

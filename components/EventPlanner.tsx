@@ -18,11 +18,30 @@ export type EventPlan = {
 
 const VOL_POOL = ["Dana Holt", "Marcus Reyes", "Priya Shah", "Tom Avery", "Lena Cole", "Sam Ruiz", "Nina Patel"];
 
+const SOCIALS = [
+  { key: "facebook", label: "Facebook", icon: "📘" },
+  { key: "instagram", label: "Instagram", icon: "📸" },
+  { key: "x", label: "X", icon: "𝕏" },
+  { key: "nextdoor", label: "Nextdoor", icon: "🏡" },
+];
+
 export default function EventPlanner({ plan }: { plan: EventPlan }) {
   const [roles, setRoles] = useState(plan.roles);
   const [materials, setMaterials] = useState(plan.materials);
   const [schedule, setSchedule] = useState(plan.schedule);
   const [adding, setAdding] = useState<"role" | "material" | "time" | null>(null);
+  const [connected, setConnected] = useState<Set<string>>(new Set());
+  const [autoPush, setAutoPush] = useState(false);
+  const [pushed, setPushed] = useState(false);
+
+  function toggleSocial(name: string) {
+    setConnected((c) => {
+      const next = new Set(c);
+      next.has(name) ? next.delete(name) : next.add(name);
+      return next;
+    });
+    setPushed(false);
+  }
 
   const assignedEverywhere = roles.flatMap((r) => r.filled);
   const available = VOL_POOL.filter((v) => !assignedEverywhere.includes(v));
@@ -274,6 +293,72 @@ export default function EventPlanner({ plan }: { plan: EventPlan }) {
               </form>
             ) : (
               <button className="btn btn-ghost" style={{ padding: "8px 16px", fontSize: 13 }} onClick={() => setAdding("time")}>+ Add time</button>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Promote on social ────────────────────────────────── */}
+      <section>
+        <SectionHead>Promote on social</SectionHead>
+        <div className="glass" style={{ borderRadius: 18, padding: 20 }}>
+          <p style={{ color: "var(--ink-soft)", fontSize: 14, lineHeight: 1.6, marginBottom: 16 }}>
+            Connect accounts to post this event automatically. For safety, posts share only a
+            <strong> public-safe teaser</strong> — title and a &ldquo;request info&rdquo; link. The
+            date, time, and location are never published; interested people reach out and you approve them.
+          </p>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10 }}>
+            {SOCIALS.map((s) => {
+              const on = connected.has(s.key);
+              return (
+                <button
+                  key={s.key}
+                  onClick={() => toggleSocial(s.key)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                    cursor: "pointer",
+                    borderRadius: 12,
+                    padding: "12px 14px",
+                    fontSize: 14,
+                    fontWeight: 600,
+                    fontFamily: "var(--font-body)",
+                    border: "1.5px solid",
+                    borderColor: on ? "var(--honey)" : "var(--line)",
+                    background: on ? "rgba(244,190,18,0.14)" : "var(--surface)",
+                    color: "var(--ink)",
+                  }}
+                >
+                  <span style={{ fontSize: 18 }}>{s.icon}</span>
+                  <span style={{ flex: 1, textAlign: "left" }}>{s.label}</span>
+                  <span className="mono" style={{ fontSize: 10.5, fontWeight: 700, color: on ? "#2E8B57" : "var(--ink-soft)" }}>
+                    {on ? "✓" : "Connect"}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <label style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 16, cursor: "pointer" }}>
+            <input type="checkbox" checked={autoPush} onChange={(e) => setAutoPush(e.target.checked)} style={{ width: 16, height: 16, accentColor: "var(--honey-deep)" }} />
+            <span style={{ fontSize: 14 }}>Auto-publish future events to connected accounts</span>
+          </label>
+
+          <div style={{ marginTop: 16, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+            <button
+              className="btn btn-honey"
+              disabled={connected.size === 0}
+              style={{ opacity: connected.size === 0 ? 0.5 : 1, cursor: connected.size === 0 ? "not-allowed" : "pointer" }}
+              onClick={() => setPushed(true)}
+            >
+              Push teaser to {connected.size || "…"} account{connected.size === 1 ? "" : "s"}
+            </button>
+            {pushed && connected.size > 0 && (
+              <span className="mono" style={{ fontSize: 12, fontWeight: 700, color: "#2E8B57" }}>
+                ✓ Posted to {SOCIALS.filter((s) => connected.has(s.key)).map((s) => s.label).join(", ")}
+              </span>
             )}
           </div>
         </div>

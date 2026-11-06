@@ -1,6 +1,14 @@
 import { type Activity } from "@/app/activities";
 
-export default function ActivityCard({ a, onJoin }: { a: Activity; onJoin?: (a: Activity) => void }) {
+export default function ActivityCard({
+  a,
+  onJoin,
+  publicView,
+}: {
+  a: Activity;
+  onJoin?: (a: Activity) => void;
+  publicView?: boolean;
+}) {
   return (
     <div className="glass lift" style={{ borderRadius: 20, padding: 24, display: "flex", flexDirection: "column" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -30,10 +38,16 @@ export default function ActivityCard({ a, onJoin }: { a: Activity; onJoin?: (a: 
         {a.blurb}
       </p>
 
-      <div style={{ marginTop: 16, display: "flex", flexWrap: "wrap", gap: 8 }}>
-        <Tag>📅 {a.when}</Tag>
-        <Tag>📍 {a.location}</Tag>
-      </div>
+      {publicView ? (
+        <div style={{ marginTop: 16 }}>
+          <Tag>🔒 Date & location shared after you&apos;re approved</Tag>
+        </div>
+      ) : (
+        <div style={{ marginTop: 16, display: "flex", flexWrap: "wrap", gap: 8 }}>
+          <Tag>📅 {a.when}</Tag>
+          <Tag>📍 {a.location}</Tag>
+        </div>
+      )}
 
       <div
         style={{
@@ -46,10 +60,10 @@ export default function ActivityCard({ a, onJoin }: { a: Activity; onJoin?: (a: 
         }}
       >
         <span className="mono" style={{ fontSize: 11.5, color: "var(--ink-soft)" }}>
-          {a.filled}/{a.spots} joined
+          {publicView ? "Open to the public" : `${a.filled}/${a.spots} joined`}
         </span>
         <button className="btn btn-honey" style={{ padding: "9px 18px", fontSize: 14 }} onClick={() => onJoin?.(a)}>
-          {a.type === "club" ? (a.open ? "Join" : "Request to join") : "RSVP"}
+          {publicView ? "Request info →" : a.type === "club" ? (a.open ? "Join" : "Request to join") : "RSVP"}
         </button>
       </div>
     </div>
