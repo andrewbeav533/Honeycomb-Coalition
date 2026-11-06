@@ -1,13 +1,16 @@
+"use client";
 import Logo from "@/components/Logo";
 
 export default function DashNav({
   tabs,
   active,
   badge,
+  onSelect,
 }: {
   tabs: string[];
   active: string;
   badge: string;
+  onSelect?: (tab: string) => void;
 }) {
   return (
     <header
@@ -35,20 +38,24 @@ export default function DashNav({
         <Logo size={30} />
         <nav style={{ display: "flex", gap: 4 }} className="app-tabs">
           {tabs.map((t) => (
-            <span
+            <button
               key={t}
               className="app-tab"
+              onClick={() => onSelect?.(t)}
               style={{
                 padding: "8px 14px",
                 borderRadius: 999,
                 fontSize: 14.5,
                 fontWeight: 600,
+                fontFamily: "var(--font-body)",
+                border: "none",
+                cursor: "pointer",
                 color: t === active ? "var(--black)" : "var(--ink-soft)",
                 background: t === active ? "var(--honey)" : "transparent",
               }}
             >
               {t}
-            </span>
+            </button>
           ))}
         </nav>
         <span

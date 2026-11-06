@@ -97,19 +97,69 @@ export default function Home() {
             </p>
             <div style={{ display: "flex", gap: 12, marginTop: 30, flexWrap: "wrap" }}>
               <Link href="/login" className="btn btn-honey">Create your account →</Link>
-              <a href="#how" className="btn btn-ghost">See how it works</a>
+              <Link href="/browse" className="btn btn-ink">Browse open events →</Link>
             </div>
-            <p className="mono" style={{ marginTop: 22, fontSize: 12.5, color: "var(--ink-soft)" }}>
+            <p style={{ marginTop: 16, fontSize: 14, color: "var(--ink-soft)", maxWidth: 440 }}>
+              Public-school student or not in a hive?{" "}
+              <Link href="/browse" style={{ color: "var(--honey-deep)", fontWeight: 700, textDecoration: "underline" }}>
+                Find open events — no account needed.
+              </Link>
+            </p>
+            <p className="mono" style={{ marginTop: 14, fontSize: 12.5, color: "var(--ink-soft)" }}>
               Already have a code?{" "}
               <Link href="/login" style={{ color: "var(--honey-deep)", fontWeight: 700 }}>
                 Join your hive
               </Link>
+              {"  ·  "}
+              <a href="#how" style={{ color: "var(--honey-deep)", fontWeight: 700 }}>
+                See how it works
+              </a>
             </p>
           </div>
 
           <div className="animate-fade-up delay-100">
             <HoneycombHero />
           </div>
+        </div>
+      </section>
+
+      {/* ── Marketing stats ────────────────────────────────── */}
+      <section style={{ padding: "8px 20px 56px" }}>
+        <div
+          className="glass"
+          style={{
+            maxWidth: 1000,
+            margin: "0 auto",
+            borderRadius: 24,
+            padding: "clamp(28px, 4vw, 40px)",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+            gap: 20,
+            textAlign: "center",
+          }}
+        >
+          {[
+            { n: "4", label: "active hives" },
+            { n: "378", label: "members & families" },
+            { n: "12", label: "events this season" },
+          ].map((s) => (
+            <div key={s.label}>
+              <div
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontWeight: 700,
+                  fontSize: "clamp(2.4rem, 5vw, 3.4rem)",
+                  color: "var(--honey-deep)",
+                  letterSpacing: "-0.03em",
+                }}
+              >
+                {s.n}
+              </div>
+              <div className="mono" style={{ fontSize: 12.5, color: "var(--ink-soft)", marginTop: 4, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                {s.label}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
